@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-df = pd.read_csv("/Users/karolinazaczynska/Documents/Potsdam/code/UNSC-UI/dataset/conflict_annotations4UI.csv",
-                 index_col=0)
+#df = pd.read_csv("./dataset/conflict_annotations4UI.csv",index_col=0)
 
 def color_conflicts(v):
     if v == 'Direct_NegEval':
@@ -64,16 +63,11 @@ def make_pretty(styler):
     return styler
 
 
-colnames = {'sentence_text': "Text (Sentence-split)", 'Conflict_Type':'Conflict Type',
-            'Conflict_Target':'Conflict Target','Target_Country':'Target Country',
-            'speech_id': 'Speech-ID', 'country': 'Country Speaker', 'speaker': 'Speaker Name',
-            'participanttype': 'Participant-Type', 'date': 'Date of Debate'}
 
 
-df = df.style.pipe(make_pretty)
-st.set_page_config(layout="wide")
-st.title("Conflicts in UNSC Speeches")
-st.dataframe(df, column_config={old: st.column_config.Column(new) for old, new in colnames.items()})
+
+
+
 
 # TODO: filter Dataframe
 # TODO: Circular Sankey
