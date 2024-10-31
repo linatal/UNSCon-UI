@@ -1,19 +1,26 @@
-import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 import base64
 import plotly.graph_objects as go
 from prepare_data_sankeygraph import prepare_table_sankey
+from dataframe_filtering import filter_dataframe
 
 
+# TODO: Why filtering WPS only includes two sentences?
+# TODO: make preprocesing smarter to have only one conflict target/country for filtering, also rename columns before.
+# create a seperate function in prepare_data_sankeygraph.py, and only afterwards create df_links and df_source
 
+# --------------------------------------------#
+# ----TITLE----#
+st.markdown('<h1 style="text-align:center;">Sankey diagram generator for UNSCon</h1>', unsafe_allow_html=True)
+# -------------#
 # import data for sankeygraph
-df = pd.read_csv("./dataset/conflict_annotations4UI.csv", index_col=0)
+df_input = pd.read_csv("./dataset/conflict_annotations4UI.csv", index_col=0)
+df_input = df_input[df_input['sentence_text'].notna()]
+df_input = df_input[['Conflict_Type', 'Conflict_Target', 'Conflict_Target_2', 'Target_Country', 'Target_Country_2', 'country', 'Subject']]
+
+df = filter_dataframe(df_input)
 df_links, df_nodes = prepare_table_sankey(df)
-
-
-# TODO: Conflict Types
-# TODO: Topics
 
 
 # -------------------------------------------#
@@ -42,20 +49,17 @@ def set_png_as_page_bg(png_file):
 
 set_png_as_page_bg('img/background1.png')
 
-# --------------------------------------------#
-# ----TITLE----#
-st.markdown('<h1 style="text-align:center;">Sankey diagram generator for UNSCon</h1>', unsafe_allow_html=True)
-# -------------#
 
 
 # Create the figure (example Sankey layout)
 fig = go.Figure(data=[go.Sankey(
-    node=dict( label=df_nodes["label"].dropna(axis=0, how="any")),
+    node=dict( label=df_nodes["label"].dropna(axis=0, how="any"),
+               color=df_nodes["color"].dropna(axis=0, how="any")),
     link=dict(
         source=df_links["source"].dropna(axis=0, how="any"),
         target=df_links["target"].dropna(axis=0, how="any"),
         value=df_links["value"].dropna(axis=0, how="any"),
-        #color=df_links["link color"].dropna(axis=0, how="any"),
+        color=df_links["link color"].dropna(axis=0, how="any"),
 ),
 
 valueformat = ".0f",
@@ -65,9 +69,6 @@ layout = dict(
 #title = "This is the title diagram",
 height = 800)
 )
-
-
-
 
 
 # Update the layout with a template

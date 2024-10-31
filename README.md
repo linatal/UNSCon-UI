@@ -7,6 +7,6 @@ TODOs:
   * include it into preprocessing_csv.py file? -> skript is in build-unsc-corpus
 * [ ] legend + explanation for labels with md integration
 
-* [ ] classical Sankey
+* [x] classical Sankey
 * [ ] Circular Sankeys
   * interactively filtering countries?

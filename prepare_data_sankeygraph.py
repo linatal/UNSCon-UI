@@ -4,20 +4,16 @@ import matplotlib.colors as mcolors
 import random
 
 
-# TODOs: instead of target, do speaker based colors
-# color only when min number of speeches
-# alpha?
-# define a set of defined colors instead of generating each time randomly
-def expand_colorlist(target_list, rgba_colors):
+def expand_colorlist(country_list, rgba_colors):
     # doubles color list in case target list is bigger than available colors
-    if len(target_list) > len(rgba_colors):
+    if len(country_list) > len(rgba_colors):
         rgba_colors = rgba_colors+rgba_colors
-        return expand_colorlist(target_list, rgba_colors) # return the result of the recursive call
+        return expand_colorlist(country_list, rgba_colors) # return the result of the recursive call
     else:
         print()
         return rgba_colors
 
-def create_colors_column(num_rows, country_list):
+def create_colors_column(num_rows, country_list, num_rows_links, country_list_links):
     # map color to country
     # Generate 100 RGBA color values with alpha = 0.3
     #rgba_colors = [(random.randint(0, 0), random.randint(0, 255), random.randint(0, 255), .3) for _ in range(100)]
@@ -27,17 +23,23 @@ def create_colors_column(num_rows, country_list):
                    (30, 81, 123, .3), (30, 139, 195, .3)]
     rgba_colors = ["rgba"+str(x) for x in rgba_colors]
 
-    color_list_column = []
+    color_source = []
     rgba_colors_2 = expand_colorlist(country_list, rgba_colors)
-    for i in country_list:
-        color_list_column.append(rgba_colors_2[i])
-    assert num_rows == len(color_list_column)
-    return color_list_column
+    for i in range(len(country_list)):
+        color_source.append(rgba_colors_2[i])
+
+    color_links = []
+    sourceid_color_dict = dict(zip(country_list, color_source))
+    for i in country_list_links:
+        color_links.append(sourceid_color_dict[i])
+    assert num_rows == len(color_source)
+    assert len(color_links) == len(country_list_links)
+    return color_source, color_links
 
 
 def prepare_table_sankey(df):
     # prepare dfs for sankey
-    df = df[df['sentence_text'].notna()]
+
 
     df_val_1 = df[["country", "Target_Country"]]
     df_val_1 = df_val_1[df_val_1["Target_Country"].notna()]
@@ -70,13 +72,15 @@ def prepare_table_sankey(df):
     # Lina new: create df_nodes
     df_nodes = pd.DataFrame(list(mapping_dict.items()), columns=["label", "ID"])
     df_nodes = df_nodes[["ID", "label"]]
-    df_nodes['link color'] = create_colors_column(df_nodes.shape[0], df_nodes['label'])
+
 
     # return df_nodes as df_nodes and all_links as df_links
 
     # mapping of full data
     all_links['source'] = all_links['source'].map(mapping_dict)
     all_links['target'] = all_links['target'].map(mapping_dict)
+
+    df_nodes['color'], all_links['link color'] = create_colors_column(df_nodes.shape[0], df_nodes['ID'].to_list(), all_links.shape[0], all_links['source'].to_list())
     #all_links['link color'] = create_colors_column(all_links.shape[0], all_links['target'])
 
     # converting full dataframe as list for using with in plotly
