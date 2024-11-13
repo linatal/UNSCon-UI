@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 from dataframe_filtering import filter_dataframe
-from table_visualization import make_pretty, colnames, define_dtypes, display_values
+from old_code.table_visualization import make_pretty, colnames, define_dtypes, display_values
 
 df_input = pd.read_csv("./dataset/conflict_annotations4UI.csv",
                  index_col=0)

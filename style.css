@@ -1,0 +1,38 @@
+/* Global font settings for body text */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+}
+
+/* Header settings */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold; /* Non-bold headers */
+}
+
+/* Paragraph settings */
+p {
+    font-size: 18px;
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+}
+
+
+/* Adjust font size for the st.dataframe component */
+.stDataFrame table {
+    font-size: 14px; /* Adjust font size for all cells */
+}
+
+/* Optional: Adjust font size for header cells */
+.stDataFrame th {
+    font-size: 16px;
+}
+
+/* Optional: Adjust font size for data cells */
+.stDataFrame td {
+    font-size: 14px;
+}
+
+/* notbold class */
+.notbold {
+    font-weight: normal;
+}

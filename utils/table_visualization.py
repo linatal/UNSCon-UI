@@ -1,14 +1,15 @@
 import pandas as pd
 
 
+
 def color_conflicts(v):
-    if v == 'Direct Critique':
+    if v == 'Direct Conflict':
         return f"color: white; background-color: #336600; "
-    elif v == 'Proxy Critique':
+    elif v == 'Indirect Conflict':
         return f"color: white; background-color: #666600;"
-    elif v == "Accusation Lie":
+    elif v == "Challenge":
         return f"color: white; background-color: #990000;"
-    elif v == "Accusation Lie and Correction":
+    elif v == "Challenge and Correction":
         return f"color: white; background-color: #FF3333;"
 
 
@@ -41,8 +42,8 @@ def color_targets_interm(v):
 
 
 # rename values changing the df
-rename_conflicts = {'Direct_NegEval': "Direct Critique", 'Indirect_NegEval': "Proxy Critique",
-                    "Challenge": "Accusation Lie", "Correction": "Accusation Lie and Correction"}
+rename_conflicts = {'Direct_NegEval': "Direct Conflict", 'Indirect_NegEval': "Indirect Conflict",
+                    "Challenge": "Challenge", "Correction": "Challenge and Correction"}
 rename_targets = {'Speaker_Speech': "Speaker or Speech", "Countries_Group": "Group of Countries"}
 rename_targets_interm = {'Law_Policy': "Law or Policy", 'Person': "Person (Non-representative of Country)",
                          "UN-Organization": "UN-Organization (other than UNSC)",
@@ -60,7 +61,6 @@ colnames = {'sentence_text': "Text (Sentence-split)", 'Conflict_Type': 'Conflict
             'speech_sentence_id': 'Sentence-ID', 'paragraph_id': 'Paragraph-ID', 'speech': 'Speech-Num. in Debate'}
 
 
-
 # Function to apply the styling (format is not rendered in streamlit, need to change values directly in display_values())
 def make_pretty(styler):
     # styler.format(rename_conflicts, subset="Conflict_Type")
@@ -76,7 +76,6 @@ def make_pretty(styler):
 
 def define_dtypes(df):
     # define dtype for each column
-    df['date'] = pd.to_datetime(df['date']).dt.date
     df['Conflict_Type'] = df.Conflict_Type.astype('category')
     df['Conflict_Target'] = df.Conflict_Target.astype('category')
     df['Conflict_Target_2'] = df.Conflict_Target_2.astype('category')
@@ -85,6 +84,15 @@ def define_dtypes(df):
     df['Target_Country_2'] = df.Target_Country_2.astype('category')
     df['participanttype'] = df.participanttype.astype('category')
     df['country'] = df.country.astype('category')
+    df['speaker'] = df.speaker.astype('category')
+    df['filename'] = df.filename.astype('category')
+    df['Subject'] = df.Subject.astype('category')
+    df['date'] = pd.to_datetime(df['date'], format="%d %B %Y").dt.date
+    return df
+
+
+def change_nans_sankey(df):
+    df = df.apply(lambda col: col.cat.add_categories('Underspecified').fillna('Underspecified') if col.dtype.name == 'category' else col)
     return df
 
 
