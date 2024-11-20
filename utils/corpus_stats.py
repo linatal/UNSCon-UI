@@ -18,13 +18,11 @@ def create_bars(df):
         df = df.apply(lambda col: col.cat.add_categories('No Conflict').fillna(
             'No Conflict') if col.dtype.name == 'category' else col)
     elif selected == 'Conflict_Target':
-        # TODO: check check
         st.write("Distribution of *Conflict Target Groups* in selected sentences (there are two targets per sentence possible):")
         df = merge_columns_targetgrp(df)
     elif selected == 'Conflict_Target_Intermediate':
         st.write("Distribution of *Intermediate Conflict Target Groups* in selected sentences:")
     elif selected == 'Target_Country':
-        # TODO: check check
         st.write("Distribution of *Conflict Target Countries* in selected sentences (there are two targets per sentence possible):")
         df = merge_columns_targetcountry(df)
 
@@ -33,24 +31,25 @@ def create_bars(df):
 
 
 def merge_columns_targetgrp(df):
-    # prepare columns Conflict Target
+    # merge columns Conflict Target
     df_ct1 = df.loc[df['Conflict_Target'].notna()]
-    df_ct1 = df_ct1.drop(['Conflict_Target_2'], axis=1)
     df_ct2 = df.loc[df['Conflict_Target_2'].notna()]
+    df_ct1 = df_ct1.drop(['Conflict_Target_2'], axis=1)
     df_ct2 = df_ct2.drop(['Conflict_Target'], axis=1)
     df_ct2 = df_ct2.rename(columns={'Conflict_Target_2':'Conflict_Target'})
-    # TODO: check check!
+
     df_merged = pd.concat([df_ct2, df_ct1], axis=0)
     return df_merged
 
 
 def merge_columns_targetcountry(df):
-    # Target Country
+    # merge columns Target Country
+    df_tc1 = df.loc[df['Target_Country'].notna()]
     df_tc2 = df.loc[df['Target_Country_2'].notna()]
+    df_tc1 = df_tc1.drop(['Target_Country_2'], axis=1)
     df_tc2 = df_tc2.drop(['Target_Country'], axis=1)
     df_tc2 = df_tc2.rename(columns={'Target_Country_2': 'Target_Country'})
-    df_tc1 = df.drop(['Target_Country_2'], axis=1)
-    df_tc1 = df_tc1.loc[df['Target_Country_2'].notna()]
+
     # TODO: check check!
     df_merged = pd.concat([df_tc1, df_tc2], axis=0)
     return df_merged

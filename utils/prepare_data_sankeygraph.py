@@ -45,7 +45,7 @@ def display_values_sankey(df):
 
 
 def expand_colorlist(country_list, rgba_colors):
-    # doubles color list in case target list is bigger than available colors
+    # duplicates color list in case target list is bigger than available colors
     if len(country_list) > len(rgba_colors):
         rgba_colors = rgba_colors+rgba_colors
         return expand_colorlist(country_list, rgba_colors) # return the result of the recursive call
@@ -55,7 +55,7 @@ def expand_colorlist(country_list, rgba_colors):
 def create_colors_column(num_rows, country_list, country_list_links):
     # map color to country
     # List of blue shades RGBA color values with alpha = 0.3
-    #rgba_colors = [(4, 59, 92, .3), (40, 67, 135, .3), (205, 209, 228, .3), (15, 10, 222, .3), (82, 78, 183, .3), (52, 45, 113, .3),
+    #rgba_colors_blue = [(4, 59, 92, .3), (40, 67, 135, .3), (205, 209, 228, .3), (15, 10, 222, .3), (82, 78, 183, .3), (52, 45, 113, .3),
     #               (1, 1, 122, .3), (37, 41, 88, .3), (45, 85, 255, .3), (50, 50, 120, .3), (11, 127, 171, .3), (3, 138, 255, .3), (43, 44, 170, .3),
     #               (30, 81, 123, .3), (30, 139, 195, .3)]
     rgba_colors = [(213,94,0, .4), (204,121,167, .4), (0,114,178, .4), (240,228,66, .4), (0,158,115, .4)]
@@ -76,24 +76,23 @@ def create_colors_column(num_rows, country_list, country_list_links):
 
 
 def prepare_columns(df):
-    # TODO: check check
-    # prepare columns
-    # Conflict Target
+    # merge columns Conflict Target
     df_ct1 = df.loc[df['Conflict_Target'].notna()]
-    df_ct1 = df_ct1.drop(['Conflict_Target_2'], axis=1)
     df_ct2 = df.loc[df['Conflict_Target_2'].notna()]
+    df_ct1 = df_ct1.drop(['Conflict_Target_2'], axis=1)
     df_ct2 = df_ct2.drop(['Conflict_Target'], axis=1)
     df_ct2 = df_ct2.rename(columns={'Conflict_Target_2':'Conflict_Target'})
     df_ct_merged = pd.concat([df_ct2, df_ct1], axis=0)
-    # Target Country
+    # merge columns Target Country, don't drop nans for Target_Country
     df_tc2 = df_ct_merged.loc[df['Target_Country_2'].notna()]
     df_tc2 = df_tc2.drop(['Target_Country'], axis=1)
-    df_tc2 = df_tc2.rename(columns={'Target_Country_2': 'Target_Country'})
     df_tc1 = df_ct_merged.drop(['Target_Country_2'], axis=1)
-    df_merged = pd.concat([df_tc1, df_tc2], axis=0)
+    df_tc2 = df_tc2.rename(columns={'Target_Country_2': 'Target_Country'})
 
-    df_merged_rn = df_merged.rename(columns={'Conflict_Type': 'Conflict Type', 'Conflict_Target': 'Conflict Target Group', 'Target_Country':'Target Country', 'country': 'Speaker Country',
-       'Subject': 'Subject Debate'})
+    df_merged = pd.concat([df_tc1, df_tc2], axis=0)
+    df_merged_rn = df_merged.rename(columns={'Conflict_Type': 'Conflict Type', 'Conflict_Target': 'Conflict Target Group',
+                                             'Target_Country':'Target Country', 'country': 'Speaker Country',
+                                             'Subject': 'Subject Debate'})
     return df_merged_rn
 
 

@@ -5,6 +5,7 @@ from css_styles.notbold import notbold
 # TODO eine seite mit den guidelines in streamlit
 # TODO: finish barcharts
 # TODO: check check merging
+# TODO: Table filter make columns/values pretty
 
 
 # -- Set page config
@@ -31,18 +32,19 @@ st.write("""<p>
 </p>""", unsafe_allow_html=True)
 
 
-st.markdown("""<p>You can choose between the following demos (left side):</p>
+st.markdown("""<p>You can choose between the following interactive demos (left side):</p>
 <ul>
-<li style="font-size: 20px; margin-bottom: 8px; color: #148f6e">Dataset in Table format</li>
-<li style="font-size: 20px; margin-bottom: 8px; color: #148f6e">Sankeyflow</li>
+<li style="font-size: 18px; margin-bottom: 8px; color: #148f6e">Table: Dataset in table format and boxplots showing distribution of labels</li>
+<li style="font-size: 18px; margin-bottom: 8px; color: #148f6e">Piechart: Focussing on who is using which Conflict Type in the Corpus</li>
+<li style="font-size: 18px; margin-bottom: 8px; color: #148f6e">Sankeyflow: Visualizing who is critisizing whom</li>
 </ul>
 """, unsafe_allow_html=True)
 
 st.subheader("""Info:""")
 
-st.write("""<p>In the UNSCon we present a new framework for annotating expressions of Conflicts, used on examples of 
+st.write("""<p>In the UNSCon, we present a new framework for annotating expressions of Conflicts, used on examples of 
 debates on Ukraine crisis from 2014 and two debates on Women, Peace and Security Agenda. 
-Conflicts are defined as a form of critique or distancing oneself from the positions or actions from another 
+We define Conflicts as a form of critique or distancing oneself from the positions or actions from another 
 country present at the Council. A Conflict in our guidelines is therefore not necessarily a report of a military conflict - 
 generally, this is a verbal Conflict expressing a negative evaluation. </p>
 <p>A Conflict consists of a <b>Target</b>, which is the entity being evaluated, and a negative evaluation toward that Target. 
@@ -52,4 +54,7 @@ the critique to a surrogate entity (<b>Indirect Conflict</b>). Next to Conflicts
 evaluation of a Target, we look at <b>Challenging</b> Statements accusing the Target of not telling the truth, as well as the 
 Correction of that allegedly false statement.</p>""", unsafe_allow_html=True)
 
+st.write('<a title="Joowwww, Public domain, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:UN_emblem_blue.svg"><img width="12" alt="UN emblem blue" class="center" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/512px-UN_emblem_blue.svg.png?20230920050537"></a>', unsafe_allow_html=True)
+
 st.sidebar.success("Select a demo above.")
+

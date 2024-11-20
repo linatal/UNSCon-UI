@@ -24,8 +24,8 @@ local_css("style.css")
 # --------------------------------------------#
 # ----TITLE----#
 # Title the app
-st.title('Interactive UNSCon Sankey visualizer')
-st.subheader('*Who is criticized by whom and how often in the UNSCon?*')
+st.title('Interactive Sankeyflow Visualizer')
+st.subheader('Who is criticized by whom and how often in the UNSCon?')
 st.markdown("""<ul>
 <li style="font-size: 20px; margin-bottom: 8px; color: #148f6e">Use the menu below to select data and set plot parameters</li>
 <li style="font-size: 20px; margin-bottom: 8px; color: #148f6e">Your plots will appear below</li>

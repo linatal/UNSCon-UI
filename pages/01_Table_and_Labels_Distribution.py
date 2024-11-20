@@ -21,18 +21,18 @@ def local_css(file_name):
 local_css("style.css")
 
 # ---Text Body
-st.title("Table visualization of the UNSCon Corpus")
-st.subheader("""Speeches, Labels and Metadata""")
+st.title("Interactive Table and Boxplot Visualization")
+st.subheader("""Speeches, Labels and Metadata of the UNSCon Corpus""")
 
 st.markdown("""<ul>
-<li style="font-size: 20px; margin-bottom: 8px; color: #148f6e">Use the menu below to select data and set plot table</li>
-<li style="font-size: 20px; margin-bottom: 50px; color: #148f6e">Your filtered table will appear below</li>
+<li style="font-size: 18px; margin-bottom: 8px; color: #148f6e">Choose the options below to filter data</li>
+<li style="font-size: 18px; margin-bottom: 8px; color: #148f6e">Both the table and the barchart below will adapt to the filters you choose</li>
+<li style="font-size: 18px; margin-bottom: 50px; color: #148f6e">Choose which labels distribution to display on barchart</li>
  </ul>
 """, unsafe_allow_html=True)
 
 # ---DF input
-df_input = pd.read_csv("./dataset/conflict_annotations4UI.csv",
-                 index_col=0)
+df_input = pd.read_csv("./dataset/conflict_annotations4UI.csv", index_col=0)
 df_input = define_dtypes(df_input)
 print()
 df = filter_dataframe(df_input)
@@ -45,6 +45,7 @@ st.dataframe(df_display, column_config={old: st.column_config.Column(new) for ol
 # ---print STATS
 get_stats(df)
 create_bars(df)
+print()
 
 # ---Sidebar
 st.sidebar.markdown('## Info:')
@@ -52,6 +53,7 @@ st.sidebar.markdown(""" <h3><span class="notbold"> Filter dataframe on:
 <ul>
 <li style="font-size: 18px; margin-bottom: 8px"><code>Conflict Type</code> </li>
 <li style="font-size: 18px; margin-bottom: 8px"><code>Conflict Target Group</code></li>
+<li style="font-size: 18px; margin-bottom: 8px"><code>Conflict Target Intermediate Group </code></li>
 <li style="font-size: 18px; margin-bottom: 8px"><code>Target Country</code> (Target Country of the Conflict)</li>
 <li style="font-size: 18px; margin-bottom: 8px"><code>Speaker Country</code> (Country the Speaker is representing)</li>
 <li style="font-size: 18px; margin-bottom: 8px"><code>Subject Debate</code> (Currently the corpus includes debates from two topics: Ukraine, and Women, Peace and Security)</li>
