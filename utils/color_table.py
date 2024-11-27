@@ -1,7 +1,5 @@
 import pandas as pd
 
-
-
 def color_conflicts(v):
     if v == 'Direct Conflict':
         return f"color: white; background-color: #336600; "
@@ -41,6 +39,23 @@ def color_targets_interm(v):
         return f"color: black; background-color: #CCFFFF;"
 
 
+def color_cells(styler):
+    # styler.format(rename_conflicts, subset="Conflict_Type")
+    styler.map(color_conflicts, subset="Conflict Type")
+    # styler.format(rename_targets, subset="Conflict_Target")
+    styler.map(color_targets, subset="Conflict Target Group")
+    # styler.format(rename_targets, subset="Conflict_Target_2")
+    styler.map(color_targets, subset="Conflict Target Group 2")
+    # styler.format(rename_targets, subset="Conflict_Target_Intermediate")
+    styler.map(color_targets_interm, subset="Conflict Target Intermediate")
+    return styler
+
+
+def change_nans_sankey(df):
+    df = df.apply(lambda col: col.cat.add_categories('Underspecified').fillna('Underspecified') if col.dtype.name == 'category' else col)
+    return df
+
+"""
 # rename values changing the df
 rename_conflicts = {'Direct_NegEval': "Direct Conflict", 'Indirect_NegEval': "Indirect Conflict",
                     "Challenge": "Challenge", "Correction": "Challenge and Correction"}
@@ -59,23 +74,22 @@ colnames = {'sentence_text': "Text (Sentence-split)", 'Conflict_Type': 'Conflict
             'filename': 'Speech-ID filename', 'speaker': 'Speaker Name',
             'participanttype': 'Participant-Type', 'date': 'Date of Debate',
             'speech_sentence_id': 'Sentence-ID', 'paragraph_id': 'Paragraph-ID', 'speech': 'Speech-Num. in Debate'}
-
+"""
 
 # Function to apply the styling (format is not rendered in streamlit, need to change values directly in display_values())
-def make_pretty(styler):
-    # styler.format(rename_conflicts, subset="Conflict_Type")
-    styler.map(color_conflicts, subset="Conflict_Type")
-    # styler.format(rename_targets, subset="Conflict_Target")
-    styler.map(color_targets, subset="Conflict_Target")
-    # styler.format(rename_targets, subset="Conflict_Target_2")
-    styler.map(color_targets, subset="Conflict_Target_2")
-    # styler.format(rename_targets, subset="Conflict_Target_Intermediate")
-    styler.map(color_targets_interm, subset="Conflict_Target_Intermediate")
-    return styler
 
 
+"""
 def define_dtypes(df):
     # define dtype for each column
+    for column in df.columns:
+        if column == "Sentence-ID" or column == "Paragraph-ID" or column == "Speech-Num. in Debate":
+            df[column] = df[column].astype('int64') # Convert columns to integer
+        elif column == "date":
+            df[column] = pd.to_datetime(df['Date of Debate'], format="%d %B %Y").dt.date # Convert 'date' to datetime
+        else:
+            df[column] = df[column].astype('category')
+
     df['Conflict_Type'] = df.Conflict_Type.astype('category')
     df['Conflict_Target'] = df.Conflict_Target.astype('category')
     df['Conflict_Target_2'] = df.Conflict_Target_2.astype('category')
@@ -91,11 +105,6 @@ def define_dtypes(df):
     return df
 
 
-def change_nans_sankey(df):
-    df = df.apply(lambda col: col.cat.add_categories('Underspecified').fillna('Underspecified') if col.dtype.name == 'category' else col)
-    return df
-
-
 def display_values(df):
     # rename values more user friendly
     df_display = df.copy()
@@ -107,3 +116,4 @@ def display_values(df):
     df_display['country'] = df_display['country'].cat.rename_categories(
         rename_UK)
     return df_display
+"""

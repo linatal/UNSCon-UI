@@ -25,7 +25,7 @@ st.title("Interactive Pie Chart")
 st.subheader("""Showing Conflict Types used by Countries the UNSCon Corpus""")
 
 # ---DF input
-df_input = pd.read_csv("./dataset/conflict_annotations4UI.csv", index_col=0)
+df_input = pd.read_csv("./dataset/conflict_annotations4UI_backup.csv", index_col=0)
 
 # only rows with conflict
 df_input = df_input.loc[df_input['Conflict_Type'].notna()]

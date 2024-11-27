@@ -1,4 +1,5 @@
 import pandas as pd
+from utils.helper import define_dtypes
 
 def merge_frames(df_speaker, df_conflicts):
     # merge two dfs on filename, get metadata (countryname, etc.) from df_speaker and add it to df_conflicts
@@ -8,45 +9,65 @@ def merge_frames(df_speaker, df_conflicts):
     return df_new
 
 
-def clean_up_dataframes(df_c, df_s):
-    # delete uneccessary rows
-    df_s = df_s[['speech', 'country', 'speaker', 'participanttype', 'date', 'filename']]
-    # unify None annotations
-    df_c = df_c.replace("_", None)
-    df_c = df_c.replace("-NONE-", None)
-    # merge conflict, target and target country annotations to one column respectively and rename
-    # or, only rename column
-    df_c['Conflict_Type'] = df_c['A0_Negative_Evaluation'].fillna(df_c['B1_ChallengeType'])
-    df_c['Conflict_Target'] = df_c['A2_Target_Council'].fillna(df_c['B2_Target_Challenge'])
-    df_c = df_c.rename(columns={'A2_Target_Council_2':'Conflict_Target_2'})
+def rename_target_country(df, column_x, list_column):
+    """
+    Replace "_" and "-NONE-" with None in the dataframe.
+    Replace None with "Underspecified" in `column_x` if `column_y` has a value not equal to None.
 
-    df_c['Target_Country'] = df_c['A4_Country_Name'].fillna(df_c['B3_Country_Name'])
+    Parameters:
+    df (pd.DataFrame): The input DataFrame.
+    list_column (list): List with name of the columns to modify.
+    column_y (str): The name of the column to check.
 
-    df_c = df_c.rename(columns={'A3_Target_Intermediate':'Conflict_Target_Intermediate'})
-    df_c = df_c.rename(columns={'A4_Country_Name_2': 'Target_Country_2'})
-    df_c = df_c.rename(columns={'text': 'sentence_text'})
-    # rename target country values
-    df_c['Target_Country'] = df_c['Target_Country'].str.replace('_', ' ')
-    df_c['Target_Country_2'] = df_c['Target_Country_2'].str.replace('_', ' ')
-    # capitalize
-    df_c['Target_Country'] = df_c['Target_Country'].str.title()
-    df_c['Target_Country_2'] = df_c['Target_Country_2'].str.title()
-    # add .txt ending to each value in filename column to enable merging with speaker.tsv
-    df_c['filename'] = df_c['fileid'].astype(str) + '.txt'
-    # merge dataframes
-    df_c_merged = merge_frames(df_s, df_c)
-    # keep only interesting columns
-    df_c_merged = df_c_merged[['sentence_text',
-                               "Conflict_Type",
-                               "Conflict_Target", "Conflict_Target_2",
-                               "Conflict_Target_Intermediate",
-                               "Target_Country", "Target_Country_2",
-                               "country", "speaker", "participanttype", "date",
-                               "speech_sentence_id", "paragraph_id", 'filename', 'speech']]
-    #include only rows where sentence_text is specifically a string
-    df_c_merged_filtered = df_c_merged[df_c_merged['sentence_text'].apply(lambda x: isinstance(x, str))]
-    return df_c_merged_filtered
+    Returns:
+    pd.DataFrame: The modified DataFrame.
+    """
+    for column_y in list_column:
+        df.loc[df[column_y] != '_', column_x] = df[column_x].replace('_', 'Underspecified')
+        df[column_y] = df[column_y].str.replace('_', ' ')
+        df[column_y] = df[column_y].str.title()
+    return df
 
+
+def merge_columns(df_conflicts):
+    df_conflicts['Conflict_Type'] = df_conflicts['A0_Negative_Evaluation'].fillna(df_conflicts['B1_ChallengeType'])
+    df_conflicts['Conflict_Target'] = df_conflicts['A2_Target_Council'].fillna(df_conflicts['B2_Target_Challenge'])
+    df_conflicts['Target_Country'] = df_conflicts['A4_Country_Name'].fillna(df_conflicts['B3_Country_Name'])
+    return df_conflicts
+
+def rename_columns(df):
+    # rename columns for diplaying (without changing the source data)
+    colnames = {'text': "Text (Sentence-split)", 'Conflict_Type': 'Conflict Type',
+                'Conflict_Target': 'Conflict Target Group', 'A2_Target_Council_2': 'Conflict Target Group 2',
+                'A3_Target_Intermediate' : 'Conflict Target Intermediate',
+                'Target_Country': 'Target Country', 'A4_Country_Name_2': 'Target Country 2',
+                'country': 'Country Speaker',
+                'filename': 'Speech-ID filename', 'speaker': 'Speaker Country',
+                'participanttype': 'Participant-Type', 'date': 'Date of Debate',
+                'speech_sentence_id': 'Sentence-ID', 'paragraph_id': 'Paragraph-ID', 'speech': 'Speech-Num. in Debate'}
+    df_renamed = df.rename(columns=colnames)
+    return df_renamed
+
+
+def rename_values(df):
+    # rename values more user friendly
+    rename_conflict_values = {'Direct_NegEval': "Direct Conflict", 'Indirect_NegEval': "Indirect Conflict",
+                        "Challenge": "Challenge", "Correction": "Challenge and Correction"}
+    rename_target_values = {'Speaker_Speech': "Speaker or Speech", "Countries_Group": "Group of Countries"}
+    rename_target_interm_values = {'Law_Policy': "Law or Policy", 'Person': "Person (Non-representative of Country)",
+                             "UN-Organization": "UN-Organization (other than UNSC)",
+                             "Non-Governm_Grp": "Non-Governmental Group"}
+    rename_UK_values = {"United Kingdom Of Great Britain And Northern Ireland": "United Kingdom"}
+
+    df_display = df.copy()
+    df_display['Conflict Type'] = df_display['Conflict Type'].cat.rename_categories(rename_conflict_values)
+    df_display['Conflict Target Group'] = df_display['Conflict Target Group'].cat.rename_categories(rename_target_values)
+    df_display['Conflict Target Group 2'] = df_display['Conflict Target Group 2'].cat.rename_categories(rename_target_values)
+    df_display['Conflict Target Intermediate'] = df_display['Conflict Target Intermediate'].cat.rename_categories(rename_target_interm_values)
+    df_display['Country Speaker'] = df_display['Country Speaker'].cat.rename_categories(rename_UK_values)
+    df_display['Target Country'] = df_display['Target Country'].cat.rename_categories(rename_UK_values)
+    df_display['Target Country 2'] = df_display['Target Country 2'].cat.rename_categories(rename_UK_values)
+    return df_display
 
 def add_topics(df):
     fileid_list = df['filename'].str[:18].to_list()
@@ -59,9 +80,44 @@ def add_topics(df):
         else:
             listi.append(None)
             print("Warning, there is a row with no Subject entry, append None value.")
-    assert len(fileid_list) == len(listi)
-    df['Subject'] = listi
+    if len(listi) == len(df):
+        df = df.copy()
+        df.loc[:, 'Subject'] = listi
+    else:
+        raise ValueError("The length of list must match the number of rows in the DataFrame.")
     return df
+
+def prapare_and_merge_dataframe(df_conflicts, df_speaker):
+    # prepare country names
+    target_country_columns = ["A4_Country_Name", "A4_Country_Name_2", "B3_Country_Name", "B3_Country_Name_2"]
+    df_conflicts = rename_target_country(df_conflicts, "A0_Negative_Evaluation", target_country_columns)
+    # prepare filename column to enable merging with df_speaker
+    df_conflicts['filename'] = df_conflicts['fileid'].astype(str) + '.txt'
+    # replace '_' and '-NONE-' with None
+    df_conflicts = df_conflicts.replace({"_": None, "-NONE-": None})
+
+    df_conflicts = merge_columns(df_conflicts)
+    # keep only necessary columns to merge in df_speaker
+    df_speaker = df_speaker[['speech', 'country', 'speaker', 'participanttype', 'date', 'filename']]
+    # merge dataframes
+    df_conflicts_merged = merge_frames(df_speaker, df_conflicts)
+    # include only rows where sentence_text is specifically a string
+    df_conflicts_merged = df_conflicts_merged[df_conflicts_merged['text'].apply(lambda x: isinstance(x, str))]
+
+    df_subj = add_topics(df_conflicts_merged)
+    df_renamed = rename_columns(df_subj)
+    # keep only interesting columns
+    df_merged = df_renamed[['Text (Sentence-split)',
+                               "Conflict Type",
+                               "Conflict Target Group", "Conflict Target Group 2",
+                               "Conflict Target Intermediate",
+                               "Target Country", "Target Country 2",
+                               "Country Speaker", "Speaker Country", "Participant-Type", "Date of Debate",
+                               "Sentence-ID", "Paragraph-ID", 'Speech-ID filename', 'Speech-Num. in Debate']]
+    df_dtypes = define_dtypes(df_merged)
+    df_renamed = rename_values(df_dtypes)
+    return df_renamed
+
 
 
 def main():
@@ -69,11 +125,9 @@ def main():
     conflict_annotations_sentences_csv_path = "./dataset/main_conflicts_sents.csv"
     df_speaker = pd.read_csv(speaker_csv_path, delimiter="\t")
     df_conflicts = pd.read_csv(conflict_annotations_sentences_csv_path, delimiter=",", index_col=0)
+    cleanup_frame = prapare_and_merge_dataframe(df_conflicts, df_speaker)
 
-    cleanup_frame = clean_up_dataframes(df_conflicts, df_speaker)
-    new_frame = add_topics(cleanup_frame)
-
-    new_frame.to_csv("./dataset/conflict_annotations4UI.csv", sep=",")
+    cleanup_frame.to_csv("./dataset/conflict_annotations4UI.csv", sep=",")
 
 
 if __name__ == "__main__":

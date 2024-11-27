@@ -7,8 +7,9 @@ def define_dtypes_sankey(df):
     for col in df.columns:
         df[col] = df[col].astype('category')
     return df
-
+"""
 # ---- rename values in Sankey
+# to general df preprocessing
 rename_conflicts = {'Direct_NegEval': "Direct Conflict", 'Indirect_NegEval': "Indirect Conflict",
                     "Challenge": "Challenge", "Correction": "Challenge and Correction"}
 rename_targets = {'Speaker_Speech': "Speaker or Speech", "Countries_Group": "Group of Countries"}
@@ -17,6 +18,7 @@ rename_targets_interm = {'Law_Policy': "Law or Policy", 'Person': "Person (Non-r
                          "Non-Governm_Grp": "Non-Governmental Group"}
 rename_UK = {"United Kingdom Of Great Britain And Northern Ireland": "United Kingdom"}
 
+# to general df preprocessing
 def display_values_sankey(df):
     # rename values more user friendly
     df_display = df.copy()
@@ -42,7 +44,7 @@ def display_values_sankey(df):
         df_display['Target Country'] = df_display['Target Country'].replace(rename_UK)
     return df_display
 
-
+"""
 
 def expand_colorlist(country_list, rgba_colors):
     # duplicates color list in case target list is bigger than available colors
@@ -74,48 +76,37 @@ def create_colors_column(num_rows, country_list, country_list_links):
     assert len(color_links) == len(country_list_links)
     return color_source, color_links
 
-
+# for Sankey and Barchart
 def prepare_columns(df):
     # merge columns Conflict Target
-    df_ct1 = df.loc[df['Conflict_Target'].notna()]
-    df_ct2 = df.loc[df['Conflict_Target_2'].notna()]
-    df_ct1 = df_ct1.drop(['Conflict_Target_2'], axis=1)
-    df_ct2 = df_ct2.drop(['Conflict_Target'], axis=1)
-    df_ct2 = df_ct2.rename(columns={'Conflict_Target_2':'Conflict_Target'})
+    df_ct1 = df.loc[df['Conflict Target Group'].notna()]
+    df_ct2 = df.loc[df['Conflict Target Group 2'].notna()]
+    df_ct1 = df_ct1.drop(['Conflict Target Group 2'], axis=1)
+    df_ct2 = df_ct2.drop(['Conflict Target Group'], axis=1)
+    df_ct2 = df_ct2.rename(columns={'Conflict Target Group 2':'Conflict Target Group'})
     df_ct_merged = pd.concat([df_ct2, df_ct1], axis=0)
     # merge columns Target Country, don't drop nans for Target_Country
-    df_tc2 = df_ct_merged.loc[df['Target_Country_2'].notna()]
-    df_tc2 = df_tc2.drop(['Target_Country'], axis=1)
-    df_tc1 = df_ct_merged.drop(['Target_Country_2'], axis=1)
-    df_tc2 = df_tc2.rename(columns={'Target_Country_2': 'Target_Country'})
+    df_tc2 = df_ct_merged.loc[df['Target Country 2'].notna()]
+    df_tc2 = df_tc2.drop(['Target Country'], axis=1)
+    df_tc1 = df_ct_merged.drop(['Target Country 2'], axis=1)
+    df_tc2 = df_tc2.rename(columns={'Target Country 2': 'Target Country'})
 
     df_merged = pd.concat([df_tc1, df_tc2], axis=0)
-    df_merged_rn = df_merged.rename(columns={'Conflict_Type': 'Conflict Type', 'Conflict_Target': 'Conflict Target Group',
-                                             'Target_Country':'Target Country', 'country': 'Speaker Country',
-                                             'Subject': 'Subject Debate'})
-    return df_merged_rn
+
+    return df_merged
 
 
 def prepare_table_sankey(df):
     # prepare dfs for sankey
-    df_val = df[['Speaker Country', 'Target Country']]
+    df_val = df[['Country Speaker', 'Target Country']]
 
-    #df_val_1 = df_val_1[df_val_1["Target_Country"].notna()]
-    #df_val_2 = df[["country", "Target_Country_2"]]
-    #df_val_2 = df_val_2[df_val_2["Target_Country_2"].notna()]
-    #df_val_2 = df_val_2.rename(columns={"Target_Country_2": "Target_Country"})
-    #df_val = pd.concat([df_val_1, df_val_2], ignore_index=True, sort=False)
     df_val.loc[:, "Target Country"] = df_val["Target Country"].fillna("Underspecified")
-    df_count = df_val.groupby(by=['Speaker Country', "Target Country"], observed=False).size().reset_index(name="Count")
+    df_val.loc[:, "Target Country"] = df_val["Target Country"].replace("-None-", "Underspecified")
+    df_val.loc[:, "Target Country"] = df_val["Target Country"].replace(" ", "Underspecified")
+    df_count = df_val.groupby(by=['Country Speaker', "Target Country"], observed=False).size().reset_index(name="Count")
 
-    # shorten UK name
-    '''
-    rename_uk = {"United Kingdom Of Great Britain And Northern Ireland": "United Kingdom"}
-    df_count['Speaker Country'] = df_count['Speaker Country'].replace(rename_uk)
-    df_count['Target Country'] = df_count['Target Country'].replace(rename_uk)
-    '''
     # add speaker and target suffix
-    df_count['Speaker Country'] = df_count['Speaker Country'].apply(lambda x: "{}{}".format(x, '_source'))
+    df_count['Country Speaker'] = df_count['Country Speaker'].apply(lambda x: "{}{}".format(x, '_source'))
     df_count["Target Country"] = df_count["Target Country"].apply(lambda x: "{}{}".format(x, '_target'))
 
     all_links = df_count.copy()
