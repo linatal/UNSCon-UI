@@ -13,7 +13,7 @@ from utils.helper import local_css, merge_columns_targetcountry, merge_columns_t
 # --------------------------------------------#
 # ----TITLE----#
 # Title the app
-def render_sankey(filtered_df, df):
+def render_sankey(filtered_df):
     # Apply CSS
     local_css("./style.css")
     st.title('Interactive Sankeyflow Visualizer')
@@ -24,16 +24,11 @@ def render_sankey(filtered_df, df):
      </ul>
     """, unsafe_allow_html=True)
 
-    st.markdown('''                A Sankey Diagram  is a flow diagram, in which the width of arrows is proportional to the flow quantity.
-                The Sankey Diagram here shows the number of sentences in which one country (left) criticizes another country (first Sankey).''')
+    st.markdown('''A Sankey Diagram  is a flow diagram, in which the width of arrows is proportional to the flow quantity.
+                The Sankey Diagram here shows the number of sentences in which one country (left) criticizes another country.''')
 
     df_input_columns = prepare_columns(filtered_df)
-    #df_input_columns = merge_columns_targetcountry(filtered_df)
-
-    #df_input_values = display_values_sankey(df_input_columns)
-
     df_links, df_nodes = prepare_table_sankey(df_input_columns)
-
     # Create the figure (example Sankey layout)
     fig = go.Figure(data=[go.Sankey(
         node=dict(label=df_nodes["label"].dropna(axis=0, how="any"),
@@ -44,7 +39,6 @@ def render_sankey(filtered_df, df):
             value=df_links["value"].dropna(axis=0, how="any"),
             color=df_links["link color"].dropna(axis=0, how="any"),
         ),
-
         valueformat=".0f",
         valuesuffix=" sentences")
     ],
@@ -52,7 +46,6 @@ def render_sankey(filtered_df, df):
             # title = "This is the title diagram",
             height=1000)
     )
-
     # Update the layout with a template
     fig.update_layout(
         template="plotly_white",
@@ -70,13 +63,9 @@ def render_sankey(filtered_df, df):
         st.markdown('''<br><br><br><H4 text-align="center">Speaker Country</H4>''', unsafe_allow_html=True)
     with _right:
         st.markdown('''<br><br><br><H4 text-align="center">Target Country of Conflict</H4>''', unsafe_allow_html=True)
-
-# -------------#
-# import data for sankeygraph
-
-
-
-#df_input_dtypes = define_dtypes_sankey(df_input)
+    # ---print Num. of Sentences
+    num_rows = filtered_df.shape
+    st.write(f"Number of sentences: {num_rows[0]}  ")
 
 
 

@@ -100,13 +100,19 @@ def prepare_table_sankey(df):
     # prepare dfs for sankey
     df_val = df[['Country Speaker', 'Target Country']]
 
-    df_val.loc[:, "Target Country"] = df_val["Target Country"].fillna("Underspecified")
-    df_val.loc[:, "Target Country"] = df_val["Target Country"].replace("-None-", "Underspecified")
-    df_val.loc[:, "Target Country"] = df_val["Target Country"].replace(" ", "Underspecified")
+    # set category Underspecified
+    # Ensure the column is of type 'category'
+    #if df_val["Target Country"].dtype == "category":
+        # Add the category 'Underspecified'
+    #    df_val["Target Country"] = df_val["Target Country"].cat.add_categories("Underspecified")
+    #df_val.loc[:, "Target Country"] = df_val["Target Country"].fillna("Underspecified")
+
+    #df_val.loc[:, "Target Country"] = df_val["Target Country"].replace("-None-", "Underspecified")
+    #df_val.loc[:, "Target Country"] = df_val["Target Country"].replace(" ", "Underspecified")
     df_count = df_val.groupby(by=['Country Speaker', "Target Country"], observed=False).size().reset_index(name="Count")
 
     # add speaker and target suffix
-    df_count['Country Speaker'] = df_count['Country Speaker'].apply(lambda x: "{}{}".format(x, '_source'))
+    #df_count['Country Speaker'] = df_count['Country Speaker'].apply(lambda x: "{}{}".format(x, '_source'))
     df_count["Target Country"] = df_count["Target Country"].apply(lambda x: "{}{}".format(x, '_target'))
 
     all_links = df_count.copy()

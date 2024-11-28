@@ -24,7 +24,7 @@ def define_dtypes(df):
             df[column] = df[column].astype('int64') # Convert columns to integer
         elif column == "date":
             df[column] = pd.to_datetime(df['Date of Debate'], format="%d %B %Y").dt.date # Convert 'date' to datetime
-        elif column == "Text (Sentence-split)":
+        elif column == "Text (Sentence-split)" or column == "Speaker Name":
             df[column] = df[column].astype('object')
         else:
             df[column] = df[column].astype('category')
