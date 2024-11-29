@@ -1,4 +1,3 @@
-#---------- imports dataset df and prepares it for sankey display
 import pandas as pd
 
 
@@ -8,15 +7,6 @@ def define_dtypes_sankey(df):
         df[col] = df[col].astype('category')
     return df
 """
-# ---- rename values in Sankey
-# to general df preprocessing
-rename_conflicts = {'Direct_NegEval': "Direct Conflict", 'Indirect_NegEval': "Indirect Conflict",
-                    "Challenge": "Challenge", "Correction": "Challenge and Correction"}
-rename_targets = {'Speaker_Speech': "Speaker or Speech", "Countries_Group": "Group of Countries"}
-rename_targets_interm = {'Law_Policy': "Law or Policy", 'Person': "Person (Non-representative of Country)",
-                         "UN-Organization": "UN-Organization (other than UNSC)",
-                         "Non-Governm_Grp": "Non-Governmental Group"}
-rename_UK = {"United Kingdom Of Great Britain And Northern Ireland": "United Kingdom"}
 
 # to general df preprocessing
 def display_values_sankey(df):
@@ -76,7 +66,6 @@ def create_colors_column(num_rows, country_list, country_list_links):
     assert len(color_links) == len(country_list_links)
     return color_source, color_links
 
-# for Sankey and Barchart
 def prepare_columns(df):
     # merge columns Conflict Target
     df_ct1 = df.loc[df['Conflict Target Group'].notna()]
@@ -92,7 +81,6 @@ def prepare_columns(df):
     df_tc2 = df_tc2.rename(columns={'Target Country 2': 'Target Country'})
 
     df_merged = pd.concat([df_tc1, df_tc2], axis=0)
-
     return df_merged
 
 

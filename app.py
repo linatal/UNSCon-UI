@@ -3,14 +3,11 @@ from utils.shared_sidebar import get_data, filter_dataframe, sidebar_navigation
 from demos.homepage import render_homepage
 from demos.guidelines import render_guidelines
 from demos.Piechart import render_piechart
-from demos.Table_and_Labels_Distribution import render_table
+from demos.Table import render_table
 from demos.Barchart import render_bars
 from demos.Sankeyflow import render_sankey
-from streamlit_pdf_viewer import pdf_viewer
 
 # TODO: Include Tortendiagramm
-# TODO eine seite mit den guidelines in streamlit
-# TODO: Table filter make columns/values pretty
 
 # -- Set page config
 apptitle = 'Conflicts in the UNSC'
@@ -22,9 +19,9 @@ st.set_page_config(
 # Load the data
 df = get_data()
 # Sidebar navigation and filtering
-selected_page = sidebar_navigation()
+#selected_page = sidebar_navigation()
 filtered_df = filter_dataframe(df)
-#selected_page = "Sankeyflow"
+selected_page = "Piechart"
 
 # Render the main page
 if selected_page == "Homepage":
@@ -39,7 +36,7 @@ elif selected_page == "Sankeyflow":
              'Country Speaker']]  # , 'Subject'
     render_sankey(filtered_df)
 elif selected_page == "Piechart":
-    render_piechart(filtered_df, df)
+    render_piechart(df)
 elif selected_page == "Guidelines Filters":
-    render_guidelines(filtered_df)
+    render_guidelines()
 

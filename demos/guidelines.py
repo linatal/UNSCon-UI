@@ -1,8 +1,7 @@
 import streamlit as st
 from utils.helper import local_css
-# -- Set page config
 
-def render_guidelines(filtered_df):
+def render_guidelines():
     local_css("./style.css")
     st.write("# Labels for the UN Security Council Conflicts Corpus (UNSCon) ")
     st.write('In the UNSCon demo, it is possible to filter the corpus based on various features. The document aims to explains each filter in more detail.')
@@ -72,7 +71,6 @@ def render_guidelines(filtered_df):
      | Ukraine | Debates concerning the Ukraine conflict in 2014 after the annexation of Crimea and before the Minsk II agreement. |
      | Women, Peace, and Security (WPS) | Debates dealing with the impacts that conflict had on women and girls and the question, how to systematically include women in peacebuilding efforts.|
      """)
-
 
     st.write("---------------")
     st.write("*Info:*")

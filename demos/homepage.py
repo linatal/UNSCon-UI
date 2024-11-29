@@ -17,7 +17,8 @@ def render_homepage(filtered_df):
 
     st.markdown("""<p>You can choose between the following pages on the sidebar:</p>
     <ul>
-    <li style="font-size: 18px; margin-bottom: 8px; color: #148f6e"> <b>Table and Labels Distribution</b>: demo showing Dataset in table format and boxplots showing distribution of labels</li>
+    <li style="font-size: 18px; margin-bottom: 8px; color: #148f6e"> <b>Table</b>: demo showing Dataset in table format</li>
+    <li style="font-size: 18px; margin-bottom: 8px; color: #148f6e"> <b>Barplot Labels Distribution</b>: boxplots showing distribution of labels</li>
     <li style="font-size: 18px; margin-bottom: 8px; color: #148f6e"> <b>Sankeyflow</b>: demo visualizing who is critisizing whom</li>
     <li style="font-size: 18px; margin-bottom: 8px; color: #148f6e"> <b>Conflict Types Piechart</b>: demo focussing on who is using which Conflict Type in the Corpus</li>
         <li style="font-size: 18px; margin-bottom: 8px; color: #148f6e"> <b>Guidelines</b>: explains the Labels in the Dataset that appear in the Filter</li>

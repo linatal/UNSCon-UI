@@ -43,3 +43,7 @@ p {
   margin-right: auto;
   width: 30%;
 }
+
+span[data-baseweb="tag"] {
+  background-color: blue !important;
+}

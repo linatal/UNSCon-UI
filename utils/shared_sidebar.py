@@ -99,7 +99,7 @@ def sidebar_navigation():
     st.sidebar.write("Use the navigation menu to switch between demos.👇")
     page = st.sidebar.selectbox(
         "Select a Demo Page",
-        options=["Homepage", "Tables and Labels Distribution", "Barchart", "Sankeyflow", "Piechart", "Guidelines Filters"],
+        options=["Homepage", "Table", "Barchart", "Sankeyflow", "Piechart", "Guidelines Filters"],
         key = "global_navigation_selectbox"
     )
 

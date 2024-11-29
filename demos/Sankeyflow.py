@@ -1,18 +1,10 @@
-import pandas as pd
 import streamlit as st
-import base64
 import plotly.graph_objects as go
-from utils.prepare_data_sankeygraph import prepare_table_sankey, prepare_columns, define_dtypes_sankey
-from utils.shared_sidebar import get_data, filter_dataframe, sidebar_navigation
-from utils.helper import local_css, merge_columns_targetcountry, merge_columns_targetgrp
+from utils.prepare_data_sankeygraph import prepare_table_sankey, prepare_columns
+from utils.helper import local_css
 
 
 
-
-
-# --------------------------------------------#
-# ----TITLE----#
-# Title the app
 def render_sankey(filtered_df):
     # Apply CSS
     local_css("./style.css")
