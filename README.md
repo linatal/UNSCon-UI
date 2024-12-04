@@ -1,12 +1,11 @@
+# UNSC Conflicts Corpus Demo 
 
+This This app visualizes the our **UN Security Council's Conflicts Corpus (UNSCon)** based on 86 annotated speeches.
+For more information on the corpus, see our [paper](https://aclanthology.org/2024.lrec-main.716/) and [github repo](https://github.com/linatal/UNSCon).
+We build the app using [Streamlit](https://streamlit.io/).
 
-TODOs: 
-* [x] conflict_annotations_sentences.csv ist buggy in Target_Country zeile 2022/2023, sentence: "The Russian side accused the armed forces of Ukraine of shelling on Russian territory on 28 June , namely , Mine No ." 
-* [x] filter Dataframe
-* [x] fix and include preprocessing skript that converts edu-based main_conflicts.csv to conflict_annotations_sentences.csv
-  * include it into preprocessing_csv.py file? -> skript is in build-unsc-corpus
-* [ ] legend + explanation for labels with md integration
+![homepage_img.png](homepage_img.png)
 
-* [x] classical Sankey
-* [ ] Circular Sankeys
-  * interactively filtering countries?
+To run the demo download the requirements typing in your terminal:  
+```pip -r requirements.txt```
+Then run the app: ```streamlit run ./app.py``` 

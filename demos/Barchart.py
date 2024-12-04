@@ -6,7 +6,7 @@ def render_bars(df):
     st.title("Interactive Barchart Visualization")
     barcharts_types = ['Conflict Type', 'Conflict Target Group', 'Conflict Target Intermediate', 'Target Country', 'Country Speaker', 'Subject']
     selected = st.selectbox(r"$\textsf{\large Show the label distribution for: }$", barcharts_types)
-
+    #selected = "Conflict Target Group"
     if selected == 'Conflict Type':
         st.write("Distribution of *Conflict Types* in selected sentences:")
         df = df.apply(lambda col: col.cat.add_categories('No Conflict').fillna(
@@ -19,6 +19,7 @@ def render_bars(df):
     elif selected == 'Target Country':
         st.write("Distribution of *Conflict Target Countries* in selected sentences (there are two targets per sentence possible):")
         df = merge_columns_targetcountry(df)
+        print()
 
     chart_data = df[selected].value_counts()
     st.bar_chart(chart_data,  x_label=selected, y_label='num. sentences')

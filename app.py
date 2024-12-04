@@ -19,14 +19,14 @@ st.set_page_config(
 # Load the data
 df = get_data()
 # Sidebar navigation and filtering
-#selected_page = sidebar_navigation()
+selected_page = sidebar_navigation()
 filtered_df = filter_dataframe(df)
-selected_page = "Piechart"
+#selected_page = "Barchart"
 
 # Render the main page
 if selected_page == "Homepage":
     render_homepage(filtered_df)
-elif selected_page == "Tables and Labels Distribution":
+elif selected_page == "Table":
     render_table(filtered_df, df)
 if selected_page == "Barchart":
     render_bars(filtered_df)
@@ -36,7 +36,7 @@ elif selected_page == "Sankeyflow":
              'Country Speaker']]  # , 'Subject'
     render_sankey(filtered_df)
 elif selected_page == "Piechart":
-    render_piechart(df)
+    render_piechart(filtered_df)
 elif selected_page == "Guidelines Filters":
     render_guidelines()
 

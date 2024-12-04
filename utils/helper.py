@@ -39,7 +39,7 @@ def merge_columns_targetgrp(df):
     df_ct2 = df_ct2.drop(['Conflict Target Group'], axis=1)
     df_ct2 = df_ct2.rename(columns={'Conflict Target Group 2': 'Conflict Target Group'})
     df_merged = pd.concat([df_ct2, df_ct1], axis=0)
-    df_merged = df_merged['Conflict Target Group'].astype('category')
+    df_merged['Conflict Target Group'] = df_merged['Conflict Target Group'].astype('category')
     return df_merged
 
 
