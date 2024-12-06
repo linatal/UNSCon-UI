@@ -63,28 +63,6 @@ def render_sankey(filtered_df):
 
 
 
-"""
-st.markdown('''<h3>
-        <span class="notbold">
-            A <b>Sankey Diagram</b>  is a flow diagram, in which the width of arrows is proportional to the flow quantity.
-            The <b>Sankey Diagram</b> here shows the number of sentences in which one country (left) criticizes another country (first Sankey).
-        </span>
-    </h3>''', unsafe_allow_html=True)
-
-#df = filter_dataframe(df_input_values)
-
-st.sidebar.markdown("""""" <h3><span class="notbold">  Filter dataframe on:
-<ul>
-<li style="font-size: 18px; margin-bottom: 8px"><code>Conflict Type</code> </li>
-<li style="font-size: 18px; margin-bottom: 8px"><code>Conflict Target Group</code></li>
-<li style="font-size: 18px; margin-bottom: 8px"><code>Target Country</code> (Target Country of the Conflict)</li>
-<li style="font-size: 18px; margin-bottom: 8px"><code>Speaker Country</code> (Country the Speaker is representing)</li>
-<li style="font-size: 18px; margin-bottom: 8px"><code>Subject Debate</code> (Currently the corpus includes debates from two topics: Ukraine, and Women, Peace and Security)</li>
-</ul>
-        </span></h3>"""""", unsafe_allow_html=True)
-"""
-
-
 
 
 

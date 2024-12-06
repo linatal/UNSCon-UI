@@ -9,7 +9,6 @@ def render_homepage(filtered_df):
     # Apply CSS
     local_css("./style.css")
     st.write("# Welcome to the UNSCon Multi-Page Demo :wave:")
-    #st.write('<a title="Joowwww, Public domain, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:UN_emblem_blue.svg"><img width="10%" height=auto alt="UN emblem blue" class="center" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/UN_emblem_blue.svg/512px-UN_emblem_blue.svg.png?20230920050537"></a>',unsafe_allow_html=True)
     st.write("""<p>
         This app visualizes the our <b>UN Security Council's Conflicts Corpus (<i>UNSCon</i>)</b> based on 86 annotated speeches.
         For more information on the corpus, see our <a href="https://aclanthology.org/2024.lrec-main.716/">paper</a> and <a href="https://github.com/linatal/UNSCon">github page</a>.</p>

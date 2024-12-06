@@ -9,16 +9,11 @@ def get_data():
     return df_input
 
 
-
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds a UI on top of a dataframe to let viewers filter columns
-
-    Args:
-        df (pd.DataFrame): Original dataframe
-
-    Returns:
-        pd.DataFrame: Filtered dataframe
+    Input: Original dataframe
+    Returns filtered dataframe
     """
     # Make a copy of the pandas dataframe so the user input will not change the underlying data.
     df = df.copy()
@@ -95,7 +90,6 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 # Sidebar Navigation
 def sidebar_navigation():
     st.sidebar.title("Navigation")
-    #st.sidebar.success("Use the navigation menu to switch between demos.👇")
     st.sidebar.write("Use the navigation menu to switch between demos.👇")
     page = st.sidebar.selectbox(
         "Select a Demo Page",

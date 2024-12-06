@@ -6,35 +6,7 @@ def define_dtypes_sankey(df):
     for col in df.columns:
         df[col] = df[col].astype('category')
     return df
-"""
 
-# to general df preprocessing
-def display_values_sankey(df):
-    # rename values more user friendly
-    df_display = df.copy()
-    # Check if 'Conflict Type' is categorical
-    if df_display['Conflict Type'].dtype.name == 'category':
-        # Use rename_categories for categorical data
-        df_display['Conflict Type'] = df_display['Conflict Type'].cat.rename_categories(rename_conflicts)
-    else:
-        # If not categorical, fallback to replace
-        df_display['Conflict Type'] = df_display['Conflict Type'].replace(rename_conflicts)
-    # Check if 'Conflict Type' is categorical
-    if df_display['Conflict Target Group'].dtype.name == 'category':
-        # Use rename_categories for categorical data
-        df_display['Conflict Target Group'] = df_display['Conflict Target Group'].cat.rename_categories(rename_conflicts)
-    else:
-        # If not categorical, fallback to replace
-        df_display['Conflict Target Group'] = df_display['Conflict Target Group'].replace(rename_targets)
-    if df_display['Target Country'].dtype.name == 'category':
-        # Use rename_categories for categorical data
-        df_display['Target Country'] = df_display['Target Country'].cat.rename_categories(rename_UK, inplace=True)
-    else:
-        # If not categorical, fallback to replace
-        df_display['Target Country'] = df_display['Target Country'].replace(rename_UK)
-    return df_display
-
-"""
 
 def expand_colorlist(country_list, rgba_colors):
     # duplicates color list in case target list is bigger than available colors
@@ -88,15 +60,6 @@ def prepare_table_sankey(df):
     # prepare dfs for sankey
     df_val = df[['Country Speaker', 'Target Country']]
 
-    # set category Underspecified
-    # Ensure the column is of type 'category'
-    #if df_val["Target Country"].dtype == "category":
-        # Add the category 'Underspecified'
-    #    df_val["Target Country"] = df_val["Target Country"].cat.add_categories("Underspecified")
-    #df_val.loc[:, "Target Country"] = df_val["Target Country"].fillna("Underspecified")
-
-    #df_val.loc[:, "Target Country"] = df_val["Target Country"].replace("-None-", "Underspecified")
-    #df_val.loc[:, "Target Country"] = df_val["Target Country"].replace(" ", "Underspecified")
     df_count = df_val.groupby(by=['Country Speaker', "Target Country"], observed=False).size().reset_index(name="Count")
 
     # add speaker and target suffix
