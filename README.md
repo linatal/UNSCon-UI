@@ -19,4 +19,4 @@ We tested the demo on python 3.12.4.
 
 ### Preprocess conflict annotations file
 We preprocessed the original UNSCon dataset from ``data/main_conflicts_sents.csv`` and added some metadata from ``data/speaker.csv`` taken from the [UN Security Council Debates](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/KGVSYH) corpus by Schönfeld et al. 2019 ([paper](https://arxiv.org/abs/1906.10969)). 
-The preprocessing skript is in ``preprocessing_csv.py``. The output file used for the visualizations is 
+The preprocessing script is in ``preprocessing_csv.py``. The output file used for the demo is ``data/conflict_annotations4UI.csv``.
