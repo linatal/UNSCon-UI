@@ -1,7 +1,7 @@
 # UNSC Conflicts Corpus Demo 
 
 
-[UNSCon_DemoUI.mp4](UNSCon_DemoUI.mp4)
+![](UNSCon_DemoUI.gif)
 
 This This app visualizes the our **UN Security Council's Conflicts Corpus (UNSCon)** based on 86 speeches annotated with Conflict annotations.
 For more information on the corpus, see our [paper](https://aclanthology.org/2024.lrec-main.716/) and [github repo](https://github.com/linatal/UNSCon).
